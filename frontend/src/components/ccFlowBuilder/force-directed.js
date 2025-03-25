@@ -155,17 +155,24 @@ function forceLayout () {
     k = Math.sqrt(CANVAS_WIDTH * CANVAS_HEIGHT / mNodeList.length) * 1.5 // Aumentado para mais espaço
   }
 
-  // Gera coordenadas iniciais aleatórias
-  let initialX, initialY
-  const initialSize = 80.0 // Aumentado para maior dispersão inicial
-  for (const i in mNodeList) {
-    initialX = CANVAS_WIDTH * 0.5
-    initialY = CANVAS_HEIGHT * 0.5
-    mNodeList[i].x = initialX + initialSize * (Math.random() - 0.5) * 5
-    mNodeList[i].y = initialY + initialSize * (Math.random() - 0.5) * 5
+  // Determinar posições iniciais de forma determinística
+  // Em vez de usar números aleatórios, usar uma distribuição circular
+  const centerX = CANVAS_WIDTH * 0.5
+  const centerY = CANVAS_HEIGHT * 0.5
+  const nodeCount = mNodeList.length
+  const radius = Math.min(CANVAS_WIDTH, CANVAS_HEIGHT) * 0.35
+
+  for (let i = 0; i < mNodeList.length; i++) {
+    // Distribuição circular ou em espiral
+    const angle = (i / nodeCount) * 2 * Math.PI
+    // Pequena variação no raio para evitar sobreposições exatas
+    const nodeRadius = radius * (0.8 + (i % 3) * 0.1)
+
+    mNodeList[i].x = centerX + nodeRadius * Math.cos(angle)
+    mNodeList[i].y = centerY + nodeRadius * Math.sin(angle)
   }
 
-  // Itera 300 vezes para encontrar posições estáveis (aumentado para melhor convergência)
+  // Itera 300 vezes para encontrar posições estáveis
   for (let i = 0; i < 300; i++) {
     calculateRepulsive()
     calculateTraction()

@@ -31,15 +31,20 @@
       />
 
       <q-btn-dropdown
-        flat
-        round
+        color="primary"
+        push
+        glossy
         icon="mdi-arrange-send-backward"
         class="q-ml-sm"
         :disable="!data.nodeList || data.nodeList.length < 2"
+        label="Organizar"
       >
-        <q-tooltip>Organizar nós</q-tooltip>
+        <q-tooltip>Escolha um layout para organizar os nós automaticamente</q-tooltip>
         <q-list>
           <q-item clickable v-close-popup @click="autoOrganizeNodes('force')">
+            <q-item-section avatar>
+              <q-icon color="primary" name="mdi-vector-arrange-above" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Layout de força dirigida</q-item-label>
               <q-item-label caption>Organiza os nós usando forças de atração/repulsão</q-item-label>
@@ -47,6 +52,9 @@
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('hubRadial')">
+            <q-item-section avatar>
+              <q-icon color="primary" name="mdi-chart-bubble" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Layout Hub Radial</q-item-label>
               <q-item-label caption>Fluxos complexos com vários níveis (como chatbots)</q-item-label>
@@ -54,6 +62,9 @@
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('tree')">
+            <q-item-section avatar>
+              <q-icon color="primary" name="mdi-file-tree" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Layout em árvore</q-item-label>
               <q-item-label caption>Organiza os nós em estrutura hierárquica</q-item-label>
@@ -61,6 +72,9 @@
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('level')">
+            <q-item-section avatar>
+              <q-icon color="primary" name="mdi-view-sequential" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Layout em níveis</q-item-label>
               <q-item-label caption>Organiza os nós horizontalmente em linhas por níveis</q-item-label>
@@ -68,6 +82,9 @@
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('circle')">
+            <q-item-section avatar>
+              <q-icon color="primary" name="mdi-chart-arc" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Layout circular</q-item-label>
               <q-item-label caption>Organiza os nós em círculo (bom para fluxos cíclicos)</q-item-label>
@@ -75,6 +92,9 @@
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('grid')">
+            <q-item-section avatar>
+              <q-icon color="primary" name="mdi-grid" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Layout em grade</q-item-label>
               <q-item-label caption>Organiza os nós em uma grade uniforme</q-item-label>
