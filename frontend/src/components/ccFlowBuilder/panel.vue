@@ -46,6 +46,13 @@
             </q-item-section>
           </q-item>
 
+          <q-item clickable v-close-popup @click="autoOrganizeNodes('hubRadial')">
+            <q-item-section>
+              <q-item-label>Layout Hub Radial</q-item-label>
+              <q-item-label caption>Fluxos complexos com vários níveis (como chatbots)</q-item-label>
+            </q-item-section>
+          </q-item>
+
           <q-item clickable v-close-popup @click="autoOrganizeNodes('tree')">
             <q-item-section>
               <q-item-label>Layout em árvore</q-item-label>
@@ -633,6 +640,9 @@ export default {
       switch (layout) {
         case 'force':
           layoutName = 'Layout de força dirigida'
+          break
+        case 'hubRadial':
+          layoutName = 'Layout Hub Radial'
           break
         case 'tree':
           layoutName = 'Layout em árvore'
