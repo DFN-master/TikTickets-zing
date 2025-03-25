@@ -7,5 +7,4 @@ export interface Session extends Client {
   checkMessages?: NodeJS.Timeout;
   reconnectionAttempts?: number;
   lastConnectionVerification?: number;
-  isConnected?: boolean;
 }
