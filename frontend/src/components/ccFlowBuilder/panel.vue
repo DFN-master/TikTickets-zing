@@ -42,7 +42,7 @@
           <q-item clickable v-close-popup @click="autoOrganizeNodes('force')">
             <q-item-section>
               <q-item-label>Layout de força dirigida</q-item-label>
-              <q-item-label caption>Organização equilibrada baseada em forças</q-item-label>
+              <q-item-label caption>Organiza os nós usando forças de atração/repulsão</q-item-label>
             </q-item-section>
           </q-item>
 
@@ -56,28 +56,28 @@
           <q-item clickable v-close-popup @click="autoOrganizeNodes('tree')">
             <q-item-section>
               <q-item-label>Layout em árvore</q-item-label>
-              <q-item-label caption>Para fluxos hierárquicos</q-item-label>
+              <q-item-label caption>Organiza os nós em estrutura hierárquica</q-item-label>
             </q-item-section>
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('level')">
             <q-item-section>
               <q-item-label>Layout em níveis</q-item-label>
-              <q-item-label caption>Organização horizontal por níveis</q-item-label>
+              <q-item-label caption>Organiza os nós horizontalmente em linhas por níveis</q-item-label>
             </q-item-section>
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('circle')">
             <q-item-section>
               <q-item-label>Layout circular</q-item-label>
-              <q-item-label caption>Organização em círculo</q-item-label>
+              <q-item-label caption>Organiza os nós em círculo (bom para fluxos cíclicos)</q-item-label>
             </q-item-section>
           </q-item>
 
           <q-item clickable v-close-popup @click="autoOrganizeNodes('grid')">
             <q-item-section>
               <q-item-label>Layout em grade</q-item-label>
-              <q-item-label caption>Organização uniforme em grade</q-item-label>
+              <q-item-label caption>Organiza os nós em uma grade uniforme</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

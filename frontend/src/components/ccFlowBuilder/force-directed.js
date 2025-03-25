@@ -52,22 +52,28 @@ export function ForceDirected (data = {}, layout = 'force') {
   // Aplica o layout escolhido
   switch (layout) {
     case 'tree':
+      // Layout em árvore - Organiza os nós em uma estrutura hierárquica
       treeLayout()
       break
     case 'level':
+      // Layout em níveis - Organiza os nós horizontalmente em linhas por níveis
       levelLayout()
       break
     case 'circle':
+      // Layout circular - Organiza os nós em círculo
       circleLayout()
       break
     case 'grid':
+      // Layout em grade - Organiza os nós em uma grade uniforme
       gridLayout()
       break
     case 'hubRadial':
+      // Layout Hub Radial - Organiza nós complexos em torno de um centro
       hubRadialLayout()
       break
     case 'force':
     default:
+      // Layout de força dirigida - Organiza os nós usando forças de atração/repulsão
       forceLayout()
       break
   }
