@@ -1,15 +1,7 @@
-import { orderBy } from 'lodash'
-import { parseISO } from 'date-fns'
-
-const orderTickets = (tickets) => {
-  const newTickes = orderBy(tickets, (obj) => parseISO(obj.lastMessageAt || obj.updatedAt), ['asc'])
-  return [...newTickes]
-}
-
 const getters = {
   notifications: state => state.notifications.notifications,
   notifications_p: state => state.notifications.notifications_p,
-  tickets: state => orderTickets(state.atendimentoTicket.tickets),
+  tickets: state => state.atendimentoTicket.tickets, // Usar tickets já ordenados
   mensagensTicket: state => state.atendimentoTicket.mensagens,
   ticketFocado: state => state.atendimentoTicket.ticketFocado,
   hasMore: state => state.atendimentoTicket.hasMore,

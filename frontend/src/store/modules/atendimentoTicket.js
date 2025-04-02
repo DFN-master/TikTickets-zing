@@ -13,9 +13,32 @@ const orderTickets = (tickets) => {
   const newTickets = orderBy(tickets, [
     // Primeiro ordena por mensagens não lidas (desc para colocar tickets com unreadMessages > 0 no topo)
     ticket => ticket.unreadMessages > 0,
-    // Depois ordena por data da última mensagem
-    ticket => parseISO(ticket.lastMessageAt || ticket.updatedAt)
-  ], ['desc', 'asc'])
+    // Depois ordena por data da última mensagem (do mais recente para o mais antigo)
+    ticket => {
+      // Pegar o timestamp e convertê-lo para um objeto Date
+      let date
+      try {
+        if (ticket.lastMessageAt) {
+          // Se for um timestamp numérico em string, criar data a partir do número
+          if (!isNaN(ticket.lastMessageAt)) {
+            date = new Date(Number(ticket.lastMessageAt))
+          } else {
+            // Caso contrário, tentar parseIso
+            date = parseISO(ticket.lastMessageAt)
+          }
+        } else if (ticket.updatedAt) {
+          date = parseISO(ticket.updatedAt)
+        } else {
+          // Se nenhuma data válida, usar a data atual (para evitar ordenações inconsistentes)
+          date = new Date()
+        }
+        return date
+      } catch (e) {
+        console.error('Erro ao converter data:', e, ticket)
+        return new Date() // Em caso de erro, usar data atual
+      }
+    }
+  ], ['desc', 'desc'])
   return [...newTickets]
 }
 
@@ -214,10 +237,13 @@ const atendimentoTicket = {
       const ticketId = payload.ticketId
       const ticketIndex = tickets.findIndex(t => t.id === ticketId)
       if (ticketIndex !== -1) {
-        tickets[ticketIndex] = payload
-        tickets[ticketIndex].unreadMessages = 0
+        tickets[ticketIndex] = {
+          ...tickets[ticketIndex],
+          ...payload,
+          unreadMessages: 0
+        }
+        state.tickets = orderTickets(tickets.filter(t => checkTicketFilter(t)))
       }
-      state.ticket = tickets
     },
     // OK
     UPDATE_TICKET (state, payload) {
@@ -234,7 +260,7 @@ const atendimentoTicket = {
           profilePicUrl: payload?.contact?.profilePicUrl || payload?.profilePicUrl || tickets[ticketIndex].profilePicUrl,
           name: payload?.contact?.name || payload?.name || tickets[ticketIndex].name
         }
-        state.tickets = tickets.filter(t => checkTicketFilter(t))
+        state.tickets = orderTickets(tickets.filter(t => checkTicketFilter(t)))
 
         // Atualizar ticket focado
         if (state.ticketFocado.id === payload.id) {
@@ -252,8 +278,8 @@ const atendimentoTicket = {
           profilePicUrl: payload?.contact?.profilePicUrl || payload?.profilePicUrl,
           name: payload?.contact?.name || payload?.name
         }
-        tickets.unshift(newTicket)
-        state.tickets = tickets.filter(t => checkTicketFilter(t))
+        tickets.push(newTicket)
+        state.tickets = orderTickets(tickets.filter(t => checkTicketFilter(t)))
       }
     },
 
@@ -366,9 +392,10 @@ const atendimentoTicket = {
           ...state.tickets[TicketIndexUpdate],
           answered: payload.ticket.answered,
           unreadMessages,
-          lastMessage: payload.mediaName || payload.body
+          lastMessage: payload.mediaName || payload.body,
+          lastMessageAt: payload.timestamp || new Date().getTime().toString()
         }
-        state.tickets = tickets
+        state.tickets = orderTickets(tickets.filter(t => checkTicketFilter(t)))
       }
     },
     // OK
@@ -420,6 +447,28 @@ const atendimentoTicket = {
     RESET_MESSAGE (state) {
       state.mensagens = []
       state.mensagensCache.clear() // Limpar cache ao resetar
+    },
+    // Adicionar mutation UPDATE_TICKET_UNREAD_MESSAGES que está sendo usada no socket mas não está implementada
+    UPDATE_TICKET_UNREAD_MESSAGES (state, payload) {
+      const { ticket } = payload
+      const ticketIndex = state.tickets.findIndex(t => t.id === ticket.id)
+
+      if (ticketIndex !== -1) {
+        // Atualizar ticket existente
+        const tickets = [...state.tickets]
+        tickets[ticketIndex] = {
+          ...tickets[ticketIndex],
+          unreadMessages: ticket.unreadMessages,
+          lastMessage: ticket.lastMessage || tickets[ticketIndex].lastMessage,
+          lastMessageAt: ticket.lastMessageAt || new Date().getTime().toString()
+        }
+        state.tickets = orderTickets(tickets.filter(t => checkTicketFilter(t)))
+      } else if (checkTicketFilter(ticket)) {
+        // Adicionar novo ticket se passar no filtro
+        const tickets = [...state.tickets]
+        tickets.push(ticket)
+        state.tickets = orderTickets(tickets)
+      }
     }
   },
   actions: {
