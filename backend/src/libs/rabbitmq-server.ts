@@ -81,4 +81,18 @@ export default class RabbitmqServer {
       }
     });
   }
+
+  async consumeBalanced(queue: string, callback: (message: Message) => Promise<void>) {
+    this.channel.prefetch(5); // Limita o número de mensagens processadas simultaneamente
+    await this.channel.assertQueue(queue, { durable: true });
+    this.channel.consume(queue, async (message) => {
+      try {
+        await callback(message);
+        this.channel.ack(message);
+      } catch (error) {
+        this.channel.nack(message);
+        console.error("Erro ao processar mensagem:", error);
+      }
+    });
+  }
 }

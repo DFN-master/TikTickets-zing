@@ -1,20 +1,17 @@
-import { BullAdapter, setQueues, router as bullRoute } from "bull-board";
-import Queue from "../libs/Queue";
+import { messageQueue, fileQueue } from "../libs/Queue";
 
 // Função de inicialização do sistema de filas BullMQ
 // Responsável por configurar e iniciar o processamento de tarefas em background
 export default async function bullMQ(app) {
-  // Indica que o sistema de filas foi iniciado
   console.info("bullMQ started");
 
-  // Inicia o processamento das filas definidas
-  await Queue.process();
-  
-  // Adiciona tarefa para verificar tickets inativos do chatbot
-  await Queue.add("VerifyTicketsChatBotInactives", {});
+  // Inicia o processamento das filas
+  await messageQueue.process();
+  await fileQueue.process();
 
-  // Adiciona tarefa para envio de mensagens agendadas
-  await Queue.add("SendMessageSchenduled", {});
+  // Adiciona tarefas de exemplo
+  await messageQueue.add({ text: "Mensagem de exemplo" });
+  await fileQueue.add({ file: { name: "arquivo_exemplo.txt" } });
 
   // Em ambiente de desenvolvimento, configura interface de administração das filas
   if (process.env.NODE_ENV !== "production") {
