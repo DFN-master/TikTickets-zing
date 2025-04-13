@@ -369,6 +369,66 @@ const objMenuAdmin = [
 ]
 
 const superMenu = [
+{
+    title: 'Tenants',
+    caption: 'Tenants',
+    icon: 'mdi-office-building',
+    routeName: 'tenants'
+  },
+  {
+    title: 'Usuários',
+    caption: 'Admin de usuários',
+    icon: 'mdi-account-group',
+    routeName: 'usuariotenants'
+  },
+  {
+    title: 'E-mail',
+    caption: 'Recuperação de Senha',
+    icon: 'mdi-email',
+    routeName: 'configuracoesTenant'
+  },
+  {
+    title: 'Canais',
+    caption: 'Canais de Comunicação',
+    icon: 'mdi-cellphone-wireless',
+    routeName: 'sessoestenants'
+  },
+  {
+    title: 'API',
+    caption: 'API SuperAdmin',
+    icon: 'mdi-call-split',
+    routeName: 'tenantApi'
+  },
+  {
+    title: 'Pagamentos',
+    caption: 'Dados de Pagamento',
+    icon: 'mdi-credit-card-multiple-outline',
+    routeName: 'pagamentostenants'
+  },
+  {
+    title: 'Customizar',
+    caption: 'Logos e Cores',
+    icon: 'mdi-format-paint',
+    routeName: 'customizar'
+  },
+  {
+    title: 'Notificação',
+    caption: 'Mensagens Internas',
+    icon: 'mdi-message-text-outline',
+    routeName: 'notificacao'
+  },
+  {
+    title: 'Dados Internos',
+    caption: 'Mensagens Internas',
+    icon: 'mdi-package-variant',
+    routeName: 'tenantsPk'
+  },
+  {
+    title: 'Terminal',
+    caption: 'Terminal SSH',
+    icon: 'mdi-console',
+    routeName: 'terminal'
+  },
   {
     title: 'Empresas',
     caption: 'Admin das Empresas',

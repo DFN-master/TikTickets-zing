@@ -5,6 +5,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     redirect: { name: 'home' },
     children: [
+      { path: '/tenants', name: 'tenants', component: () => import('pages/tenants/Index.vue') },
+      { path: '/tenantsPk', name: 'tenantsPk', component: () => import('pages/tenantsPk/Index.vue' },
+      { path: '/notificacao', name: 'notificacao', component: () => import('pages/notificacao/Index.vue') },
+      { path: '/terminal', name: 'terminal', component: () => import('pages/terminal/Index.vue') },
+      { path: '/customizar', name: 'customizar', component: () => import('pages/customizar/Index.vue') },
       { path: '', component: () => import('pages/dashboard/Index.vue') },
       { path: '/home', name: 'home-dashboard', component: () => import('pages/dashboard/Index.vue') },
       { path: '/painel-atendimentos', name: 'painel-atendimentos', component: () => import('pages/dashboard/DashTicketsFilas.vue') },
