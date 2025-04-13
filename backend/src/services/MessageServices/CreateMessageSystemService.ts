@@ -11,7 +11,7 @@ import socketEmit from "../../helpers/socketEmit";
 import Queue from "../../libs/Queue";
 import { pupa } from "../../utils/pupa";
 import SendWhatsAppMedia from "../WbotServices/SendWhatsAppMedia";
-import SendWhatsAppMessage from "../WbotServices/SendWhatsAppMessage";
+import { SendWhatsAppMessage } from "../WbotServices/SendWhatsAppMessage";
 import { getInstaBot } from "../../libs/InstaBot";
 import InstagramSendMessagesSystem from "../InstagramBotServices/InstagramSendMessagesSystem";
 import TelegramSendMessagesSystem from "../TbotServices/TelegramSendMessagesSystem";
@@ -151,7 +151,9 @@ const CreateMessageSystemService = async ({
     // Alter template message
     if (msg.body && !Array.isArray(msg.body)) {
       messageData.body = pupa(msg.body || "", {
-        protocol: ticket.protocol,
+        protocol: ticket.protocols && ticket.protocols.length > 0 
+          ? ticket.protocols[ticket.protocols.length - 1].protocolNumber 
+          : '',
         name: ticket.contact.name
       });
     }

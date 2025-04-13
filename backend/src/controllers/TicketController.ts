@@ -15,6 +15,7 @@ import Whatsapp from "../models/Whatsapp";
 import AppError from "../errors/AppError";
 import CreateMessageSystemService from "../services/MessageServices/CreateMessageSystemService";
 import { pupa } from "../utils/pupa";
+import SyncMessagesTicketService from "../services/WbotServices/SyncMessagesTicketService";
 
 /**
  * Interface para parâmetros de busca e filtro de tickets
@@ -222,8 +223,11 @@ export const update = async (
       where: { id: ticket.whatsappId, tenantId }
     });
     if (whatsapp?.farewellMessage) {
+      const lastProtocol = ticket.protocols && ticket.protocols.length > 0 
+        ? ticket.protocols[ticket.protocols.length - 1].protocolNumber 
+        : '';
       const body = pupa(whatsapp.farewellMessage || "", {
-        protocol: ticket.protocol,
+        protocol: lastProtocol,
         name: ticket.contact.name
       });
       const messageData = {
@@ -296,4 +300,20 @@ export const showLogsTicket = async (
   const logsTicket = await ShowLogTicketService({ ticketId });
 
   return res.status(200).json(logsTicket);
+};
+
+export const syncMessages = async (req: Request, res: Response): Promise<Response> => {
+  const { ticketId } = req.params;
+  const { tenantId } = req.user;
+
+  try {
+    await SyncMessagesTicketService({
+      ticketId,
+      tenantId
+    });
+
+    return res.status(200).json({ message: "Mensagens sincronizadas com sucesso" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
 };
